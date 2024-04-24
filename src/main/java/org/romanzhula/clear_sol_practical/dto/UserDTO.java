@@ -41,7 +41,6 @@ public class UserDTO {
     @Column(name = "birth_date", nullable = false)
     @Temporal(value = TemporalType.DATE)
     @Past(message = "Only past data!")
-    @Min(value = 6570, message = "User must be over 18 years old!")
     private LocalDate birthDate;
 
     @Length(max = 255, message = "Message too long (limit - 255 B)")
