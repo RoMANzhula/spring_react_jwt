@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,32 +26,78 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void registerNewUser(UserDTO userDTO) {
-        String userFullName = userDTO.getFirstName() + " " + userDTO.getLastName();
-        User userFromDB = userRepository.findByEmail(userDTO.getEmail());
-        if (validAgeRestriction(userDTO.getBirthDate())) {
-            User user = new User();
-
-            user.setEmail(userDTO.getEmail());
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setBirthDate(userDTO.getBirthDate());
-            user.setAddress(userDTO.getAddress());
-            user.setPhoneNumber(userDTO.getPhoneNumber());
-
-            userRepository.save(user);
-
-        } else if (userFromDB != null) {
-            logger.error("Sorry, user {} cannot be register. User with this email already exists!", userFullName);
+    public void registerNewUser(
+            UserDTO userDTO
+    ) {
+        if (userDTO != null) {
+            String userFullName = userDTO.getFirstName() + " " + userDTO.getLastName();
+            if (userDTO.getBirthDate() != null && validAgeRestriction(userDTO.getBirthDate())) {
+                User userFromDB = userRepository.findByEmail(userDTO.getEmail());
+                if (userFromDB == null) {
+                    User user = new User();
+                    user.setEmail(userDTO.getEmail());
+                    user.setFirstName(userDTO.getFirstName());
+                    user.setLastName(userDTO.getLastName());
+                    user.setBirthDate(userDTO.getBirthDate());
+                    user.setAddress(userDTO.getAddress());
+                    user.setPhoneNumber(userDTO.getPhoneNumber());
+                    userRepository.save(user);
+                } else {
+                    logger.error(
+                            "Sorry, user {} cannot be registered. User with this email already exists!",
+                            userFullName
+                    );
+                }
+            } else {
+                logger.error(
+                        "Sorry, user {} cannot be registered. Invalid birth date or age restriction not met!",
+                        userFullName
+                );
+            }
         } else {
-            logger.error("Sorry, user {} cannot be register. User too young!", userFullName);
+            logger.error("UserDTO is null. Unable to register user.");
         }
     }
 
-    private boolean validAgeRestriction(LocalDate userBirthday) {
-        var currentDate = LocalDate.now();
-        var currentUserAge = Period.between(userBirthday, currentDate).getYears();
 
-        return currentUserAge >= ageRestriction;
+    private boolean validAgeRestriction(LocalDate userBirthday) {
+        if (userBirthday != null) {
+            var currentDate = LocalDate.now();
+            var currentUserAge = Period.between(userBirthday, currentDate).getYears();
+            return currentUserAge >= ageRestriction;
+        }
+        return false;
+    }
+
+    @Transactional
+    public void updateUserByField(
+            Long userId,
+            UserDTO userDTO
+    ) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (userDTO.getEmail() != null) {
+                user.setEmail(userDTO.getEmail());
+            }
+            if (userDTO.getFirstName() != null) {
+                user.setFirstName(userDTO.getFirstName());
+            }
+            if (userDTO.getLastName() != null) {
+                user.setLastName(userDTO.getLastName());
+            }
+            if (userDTO.getBirthDate() != null) {
+                user.setBirthDate(userDTO.getBirthDate());
+            }
+            if (userDTO.getAddress() != null) {
+                user.setAddress(userDTO.getAddress());
+            }
+            if (userDTO.getPhoneNumber() != null) {
+                user.setPhoneNumber(userDTO.getPhoneNumber());
+            }
+            userRepository.save(user);
+        } else {
+            logger.error("Sorry, user cannot be update. User NOT FOUND!");
+        }
     }
 }
