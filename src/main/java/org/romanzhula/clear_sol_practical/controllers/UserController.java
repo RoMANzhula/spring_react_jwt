@@ -73,6 +73,20 @@ public class UserController {
         return ResponseEntity.ok("User with id: " + userId + " was updated whole successfully!");
     }
 
+    @DeleteMapping("/remove-user/{userId}")
+    public ResponseEntity<String> removeUserById(
+            @PathVariable Long userId
+    ) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+
+            return ResponseEntity.ok("User deleted successfully!");
+        }
+
+        logger.error("ERROR: User with id {} NOT FOUND!", userId);
+        return ResponseEntity.notFound().build();
+    }
+
 
     @ModelAttribute("userDTO")
     public UserDTO userDTO() {
