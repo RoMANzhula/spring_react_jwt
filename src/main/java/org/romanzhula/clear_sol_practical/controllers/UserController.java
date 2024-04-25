@@ -7,19 +7,24 @@ import org.romanzhula.clear_sol_practical.json_responsies.RegistrationResponse;
 import org.romanzhula.clear_sol_practical.models.User;
 import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.romanzhula.clear_sol_practical.services.UserService;
+import org.romanzhula.clear_sol_practical.utils.UtilsController;
+import org.romanzhula.clear_sol_practical.validations.UserCreateMarker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -27,21 +32,17 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
+    /**
+     * Example with validation marker
+     * with exception handler to BadRequest
+    */
+    @Validated({UserCreateMarker.class})
     @PostMapping("/registration")
     public ResponseEntity<RegistrationResponse> createUser(
             @ModelAttribute("userDTO")
-            @Valid UserDTO userDTO,
-            BindingResult bindingResult
+            @Valid
+            @RequestBody UserDTO userDTO
     ) {
-        if (!bindingResult.hasErrors()) {
-            logger.error("Validation error! Check your input data.");
-
-            return ResponseEntity
-                    .badRequest()
-                    .body(new RegistrationResponse("Validation error! Check your input data."))
-            ;
-        }
-
         userService.registerNewUser(userDTO);
 
         return ResponseEntity
@@ -50,18 +51,25 @@ public class UserController {
         ;
     }
 
+    /**
+     * Example with BindingResult
+     * with wrapping binding errors to string VS field
+     */
     @PatchMapping("/update-field/{userId}")
     public ResponseEntity<?> updateUserField(
             @PathVariable Long userId,
-            @RequestBody @Valid UserDTO userDTO,
+            @Valid
+            @RequestBody UserDTO userDTO,
             BindingResult bindingResult
     ) {
-        if (!bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             logger.error("Validation error! Check your input update data.");
+
+            Map<String, String> errors = UtilsController.getBindingErrors(bindingResult);
 
             return ResponseEntity
                     .badRequest()
-                    .body("Validation error! Check your input update data.")
+                    .body(errors)
             ;
         }
 
@@ -77,13 +85,17 @@ public class UserController {
     @PutMapping("/whole-update/{userId}")
     public ResponseEntity<?> updateWholeUser(
         @PathVariable Long userId,
-        @RequestBody @Valid UserDTO userDTO,
+        @Valid
+        @RequestBody UserDTO userDTO,
         BindingResult bindingResult
     ) {
-        if (!bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             logger.error("Validation error! Check all input fields data.");
 
-            return ResponseEntity.badRequest().body("Validation error! Check all input fields data.");
+            return ResponseEntity
+                    .badRequest()
+                    .body("Validation error! Check all input fields data.")
+            ;
         }
 
         userService.updateWholeUser(userDTO, userId);
