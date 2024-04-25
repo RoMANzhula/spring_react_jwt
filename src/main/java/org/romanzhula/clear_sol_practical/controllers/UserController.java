@@ -56,6 +56,24 @@ public class UserController {
 
     }
 
+    @PutMapping("/whole-update/{userId}")
+    public ResponseEntity<String> updateWholeUser(
+        @PathVariable Long userId,
+        @RequestBody @Valid UserDTO userDTO,
+        BindingResult bindingResult
+    ) {
+        if (!bindingResult.hasErrors()) {
+            logger.error("Validation error! Check all input fields data.");
+
+            return ResponseEntity.badRequest().body("Validation error! Check all input fields data.");
+        }
+
+        userService.updateWholeUser(userDTO, userId);
+
+        return ResponseEntity.ok("User with id: " + userId + " was updated whole successfully!");
+    }
+
+
     @ModelAttribute("userDTO")
     public UserDTO userDTO() {
         return new UserDTO();

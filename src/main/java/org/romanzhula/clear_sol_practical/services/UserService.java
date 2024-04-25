@@ -3,6 +3,7 @@ package org.romanzhula.clear_sol_practical.services;
 import lombok.RequiredArgsConstructor;
 import org.romanzhula.clear_sol_practical.controllers.UserController;
 import org.romanzhula.clear_sol_practical.dto.UserDTO;
+import org.romanzhula.clear_sol_practical.mappers.UserMapper;
 import org.romanzhula.clear_sol_practical.models.User;
 import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -97,7 +98,18 @@ public class UserService {
             }
             userRepository.save(user);
         } else {
-            logger.error("Sorry, user cannot be update. User NOT FOUND!");
+            logger.error("Sorry, user cannot be update by field(s). User with id {} NOT FOUND!", userId);
+        }
+    }
+
+    @Transactional
+    public void updateWholeUser(UserDTO userDTO, Long userId) {
+        userDTO.setId(userId);
+
+        if (userRepository.findById(userId).isPresent()) {
+            userRepository.save(UserMapper.INSTANCE.toUserModel(userDTO));
+        } else {
+            logger.error("Sorry, user cannot be update whole. User with id {} NOT FOUND!", userId);
         }
     }
 }
