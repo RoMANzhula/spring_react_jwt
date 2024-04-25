@@ -1,5 +1,6 @@
 package org.romanzhula.clear_sol_practical.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.romanzhula.clear_sol_practical.controllers.UserController;
 import org.romanzhula.clear_sol_practical.dto.UserDTO;
@@ -9,8 +10,10 @@ import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -99,6 +102,8 @@ public class UserService {
             userRepository.save(user);
         } else {
             logger.error("Sorry, user cannot be update by field(s). User with id {} NOT FOUND!", userId);
+            throw new EntityNotFoundException("Sorry, user cannot be update by field(s). User with id " +
+                    userId + " not found!");
         }
     }
 
@@ -110,6 +115,8 @@ public class UserService {
             userRepository.save(UserMapper.INSTANCE.toUserModel(userDTO));
         } else {
             logger.error("Sorry, user cannot be update whole. User with id {} NOT FOUND!", userId);
+            throw new EntityNotFoundException("Sorry, user cannot be update whole. User with id " +
+                    userId + " NOT FOUND!");
         }
     }
 }

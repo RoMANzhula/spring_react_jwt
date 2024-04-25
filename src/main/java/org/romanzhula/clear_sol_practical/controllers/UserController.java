@@ -92,9 +92,11 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             logger.error("Validation error! Check all input fields data.");
 
+            Map<String, String> errors = UtilsController.getBindingErrors(bindingResult);
+
             return ResponseEntity
                     .badRequest()
-                    .body("Validation error! Check all input fields data.")
+                    .body(errors)
             ;
         }
 

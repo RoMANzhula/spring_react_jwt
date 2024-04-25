@@ -1,5 +1,6 @@
 package org.romanzhula.clear_sol_practical.exceptions;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,5 +19,10 @@ public class RestExceptionHandler {
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getBindingResult().getFieldError().getDefaultMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 }
