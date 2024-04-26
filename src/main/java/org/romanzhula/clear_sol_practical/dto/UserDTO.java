@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.romanzhula.clear_sol_practical.validations.UserCreateMarker;
+import org.romanzhula.clear_sol_practical.validations.UserEmailUnique;
 
 import java.time.LocalDate;
 
@@ -20,10 +22,11 @@ public class UserDTO {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    @NotEmpty(message = "Email cannot be empty!")
+//    @NotEmpty(message = "Email cannot be empty!")
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
             message = "Invalid email format. Only letters, numbers, dots, and one @ symbol.")
     @Email
+    @UserEmailUnique(groups = UserCreateMarker.class)
     private String email;
 
     @Column(name = "first_name", nullable = false)
