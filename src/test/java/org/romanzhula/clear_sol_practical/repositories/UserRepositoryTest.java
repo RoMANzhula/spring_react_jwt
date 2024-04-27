@@ -80,4 +80,5 @@ public class UserRepositoryTest {
         // Then
         assertTrue(users.isEmpty());
     }
+
 }

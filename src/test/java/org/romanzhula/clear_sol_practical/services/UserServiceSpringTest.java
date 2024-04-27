@@ -37,12 +37,14 @@ public class UserServiceSpringTest {
                 .birthDate(underageBirthDate)
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build();
+                .build()
+        ;
 
         // When & Then
         assertThrows(IllegalArgumentException.class, () ->
-                userService.registerNewUser(userDTO), "User under 18 should not be registered"
-        );
+                        userService.registerNewUser(userDTO), "User under 18 should not be registered"
+                    )
+        ;
     }
 
     @Test
@@ -56,7 +58,9 @@ public class UserServiceSpringTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build();
+                .build()
+        ;
+
         User user = new User();
         user.setId(userId);
         user.setEmail(userDTO.getEmail());

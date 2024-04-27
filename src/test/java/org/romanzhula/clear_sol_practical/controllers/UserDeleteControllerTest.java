@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 public class UserDeleteControllerTest {
+
     @Mock
     private UserRepository userRepository;
 

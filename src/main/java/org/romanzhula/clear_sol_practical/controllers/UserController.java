@@ -50,6 +50,7 @@ public class UserController {
                     .build()
             ;
         }
+
         userService.registerNewUser(userDTO);
 
         return ResponseEntity

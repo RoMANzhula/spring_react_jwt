@@ -9,8 +9,9 @@ import java.util.stream.Collectors;
 
 public class UtilsController {
     public static Map<String, String> getBindingErrors(BindingResult bindingResult) {
-        Collector<FieldError, ?, Map<String, String>> collector = Collectors
-                .toMap(
+
+        Collector<FieldError, ?, Map<String, String>> collector =
+                Collectors.toMap(
                     fieldError -> fieldError.getField() + "ERROR",
                     FieldError::getDefaultMessage
                 )

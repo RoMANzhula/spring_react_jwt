@@ -46,7 +46,8 @@ class UserRegistrationControllerTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("123 Main St")
                 .phoneNumber("")
-                .build();
+                .build()
+        ;
 
         // When
         ResponseEntity<RegistrationResponse> response = userController.createUser(userDTO);
@@ -69,8 +70,8 @@ class UserRegistrationControllerTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("123 Main St")
                 .phoneNumber("1234567890")
-                .build();
-
+                .build()
+        ;
 
         // When
         ResponseEntity<RegistrationResponse> response = userController.createUser(userDTO);
@@ -121,7 +122,8 @@ class UserRegistrationControllerTest {
 //                .lastName("Surname")
 //                .birthDate(LocalDate.of(2000, 10, 29))
 //                .address("123 Main St")
-//                .build();
+//                .build()
+//        ;
 //
 //        // When
 //        ResponseEntity<RegistrationResponse> response =
@@ -144,7 +146,8 @@ class UserRegistrationControllerTest {
 //                .birthDate(LocalDate.of(2000, 10, 29))
 //                .address("123 Main St")
 //                .phoneNumber("1234567890")
-//                .build();
+//                .build()
+//        ;
 //
 //        doNothing().when(userService).registerNewUser(userDTO);
 //

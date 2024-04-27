@@ -20,6 +20,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
+
     @Column(name = "user_id")
     private Long id;
 
@@ -53,4 +54,5 @@ public class UserDTO {
 
     @Length(min = 9, max = 15, message = "Number is short/long (limit - from 9 to 15 characters)")
     private String phoneNumber;
+
 }

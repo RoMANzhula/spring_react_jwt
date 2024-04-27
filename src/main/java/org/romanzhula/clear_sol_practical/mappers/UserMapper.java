@@ -8,6 +8,7 @@ import org.romanzhula.clear_sol_practical.models.User;
 
 @Mapper
 public interface UserMapper {
+
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(source = "id", target = "id")

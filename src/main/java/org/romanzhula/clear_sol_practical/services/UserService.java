@@ -20,6 +20,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     @Value("${app.ageRestriction}")
     private int ageRestriction;
 
@@ -35,21 +36,25 @@ public class UserService {
                 Optional<User> userFromDB = userRepository.findByEmail(userDTO.getEmail());
                 if (userFromDB.isEmpty()) {
                     User user = new User();
-                    user.setEmail(userDTO.getEmail());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
-                    user.setBirthDate(userDTO.getBirthDate());
-                    user.setAddress(userDTO.getAddress());
-                    user.setPhoneNumber(userDTO.getPhoneNumber());
+                        user.setEmail(userDTO.getEmail());
+                        user.setFirstName(userDTO.getFirstName());
+                        user.setLastName(userDTO.getLastName());
+                        user.setBirthDate(userDTO.getBirthDate());
+                        user.setAddress(userDTO.getAddress());
+                        user.setPhoneNumber(userDTO.getPhoneNumber());
+
                     userRepository.save(user);
+
                 } else {
                     logger.error("Sorry, user {} cannot be registered. User with this email already exists!",
-                            userFullName);
+                            userFullName)
+                    ;
                     throw new IllegalArgumentException("User with this email already exists!");
                 }
             } else {
                 logger.error("Sorry, user {} cannot be registered. Invalid birth date or age restriction not met!",
-                        userFullName);
+                        userFullName)
+                ;
                 throw new IllegalArgumentException("Invalid birth date or age restriction not met!");
             }
         } else {
@@ -57,7 +62,6 @@ public class UserService {
             throw new IllegalArgumentException("UserDTO is null. Unable to register user.");
         }
     }
-
 
     private boolean validAgeRestriction(LocalDate userBirthday) {
         if (userBirthday != null) {
@@ -74,6 +78,7 @@ public class UserService {
             UserDTO userDTO
     ) {
         Optional<User> optionalUser = userRepository.findById(userId);
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (userDTO.getEmail() != null) {
@@ -94,11 +99,13 @@ public class UserService {
             if (userDTO.getPhoneNumber() != null) {
                 user.setPhoneNumber(userDTO.getPhoneNumber());
             }
+
             userRepository.save(user);
         } else {
             logger.error("Sorry, user cannot be update by field(s). User with id {} NOT FOUND!", userId);
             throw new EntityNotFoundException("Sorry, user cannot be update by field(s). User with id " +
-                    userId + " not found!");
+                    userId + " not found!")
+            ;
         }
     }
 

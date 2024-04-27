@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserUpdateControllerTest {
+
     @Autowired
     MockMvc mockMvc;
 
@@ -51,7 +52,9 @@ public class UserUpdateControllerTest {
                 .email("test123123@test.test")
                 .firstName("One")
                 .lastName("One")
-                .build();
+                .build()
+        ;
+
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
 
@@ -74,7 +77,9 @@ public class UserUpdateControllerTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build();
+                .build()
+        ;
+
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
 
@@ -92,7 +97,8 @@ public class UserUpdateControllerTest {
         Long userId = 2L;
         UserDTO userDTO = UserDTO.builder()
                 .email("invalid-email") // Invalid email format
-                .build();
+                .build()
+        ;
 
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -116,7 +122,8 @@ public class UserUpdateControllerTest {
         var userDTO = UserDTO.builder()
                 .firstName("")
                 .email("test-test.test")
-                .build();
+                .build()
+        ;
 
         var content = objectMapper.writeValueAsString(userDTO);
 

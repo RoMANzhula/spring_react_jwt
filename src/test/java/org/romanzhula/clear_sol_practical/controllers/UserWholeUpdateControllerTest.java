@@ -1,6 +1,5 @@
 package org.romanzhula.clear_sol_practical.controllers;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.romanzhula.clear_sol_practical.dto.UserDTO;
@@ -40,7 +39,8 @@ public class UserWholeUpdateControllerTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build();
+                .build()
+        ;
 
         var content = objectMapper.writeValueAsString(userDTO);
 
@@ -52,12 +52,13 @@ public class UserWholeUpdateControllerTest {
                 )
                 .andReturn()
                 .getResponse()
-                ;
+        ;
 
         //Then
         assertEquals(HttpStatus.OK.value(), mockResponse.getStatus());
         assertTrue(mockResponse.getContentAsString()
-                .contains("User with id: 1 was updated whole successfully!"));
+                .contains("User with id: 1 was updated whole successfully!"))
+        ;
 
     }
 
@@ -72,24 +73,26 @@ public class UserWholeUpdateControllerTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build();
+                .build()
+        ;
 
         var content = objectMapper.writeValueAsString(userDTO);
 
         //When
         var mockResponse = mockMvc
                 .perform(put("/api/users/whole-update/{userId}", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
-                )
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(content)
+                        )
                 .andReturn()
                 .getResponse()
-                ;
+        ;
 
         //Then
         assertEquals(HttpStatus.NOT_FOUND.value(), mockResponse.getStatus());
         assertTrue(mockResponse.getContentAsString()
-                .contains("Sorry, user cannot be update whole. User with id 1 NOT FOUND!"));
+                .contains("Sorry, user cannot be update whole. User with id 1 NOT FOUND!"))
+        ;
 
     }
 
@@ -104,19 +107,20 @@ public class UserWholeUpdateControllerTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build();
+                .build()
+        ;
 
         var content = objectMapper.writeValueAsString(userDTO);
 
         //When
         var mockResponse = mockMvc
                 .perform(put("/api/users/whole-update/{userId}", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
-                )
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(content)
+                        )
                 .andReturn()
                 .getResponse()
-                ;
+        ;
 
         //Then
         assertEquals(HttpStatus.BAD_REQUEST.value(), mockResponse.getStatus());

@@ -45,7 +45,9 @@ class UserServiceTest {
                 .birthDate(LocalDate.of(1990, 1, 1))
                 .address("123 Main St")
                 .phoneNumber("1234567890")
-                .build();
+                .build()
+        ;
+
         when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.empty());
 
         // When
@@ -61,7 +63,9 @@ class UserServiceTest {
         Long userId = 1L;
         UserDTO userDTO = UserDTO.builder()
                 .email("updated@test.test")
-                .build();
+                .build()
+        ;
+
         User user = new User();
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
@@ -83,12 +87,14 @@ class UserServiceTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build();
+                .build()
+        ;
+
         Long userId = 222L;
 
         // Then
         assertThrows(EntityNotFoundException.class, () -> {
-            userService.updateWholeUser(userDTO, userId);
+                            userService.updateWholeUser(userDTO, userId);
         });
     }
 
@@ -102,13 +108,18 @@ class UserServiceTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build();
+                .build()
+        ;
 
         when(userRepository.findByEmail("testemail1@test.test")).thenReturn(Optional.of(new User()));
 
         // When & Then
         IllegalArgumentException exception =
-                assertThrows(IllegalArgumentException.class, () -> userService.registerNewUser(userDTO));
+                assertThrows(IllegalArgumentException.class, () ->
+                        userService.registerNewUser(userDTO)
+                )
+        ;
+
         String expectedMessage = "User with this email already exists!";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -118,7 +129,11 @@ class UserServiceTest {
     public void testRegisterNewUser_NullUserDTO() {
         // When & Then
         IllegalArgumentException exception =
-                assertThrows(IllegalArgumentException.class, () -> userService.registerNewUser(null));
+                assertThrows(IllegalArgumentException.class, () ->
+                        userService.registerNewUser(null)
+                )
+        ;
+
         String expectedMessage = "UserDTO is null. Unable to register user.";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -130,11 +145,15 @@ class UserServiceTest {
         Long userId = 2L;
         UserDTO userDTO = UserDTO.builder()
                 .email("updated@test.test")
-                .build();
+                .build()
+        ;
+
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThrows(EntityNotFoundException.class, () -> userService.updateUserByField(userId, userDTO));
+        assertThrows(EntityNotFoundException.class, () ->
+                userService.updateUserByField(userId, userDTO)
+        );
     }
 
 }
