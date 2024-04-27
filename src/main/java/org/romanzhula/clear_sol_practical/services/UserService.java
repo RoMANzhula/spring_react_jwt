@@ -28,9 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void registerNewUser(
-            UserDTO userDTO
-    ) {
+    public void registerNewUser(UserDTO userDTO) {
         if (userDTO != null) {
             String userFullName = userDTO.getFirstName() + " " + userDTO.getLastName();
             if (userDTO.getBirthDate() != null && validAgeRestriction(userDTO.getBirthDate())) {
@@ -45,19 +43,18 @@ public class UserService {
                     user.setPhoneNumber(userDTO.getPhoneNumber());
                     userRepository.save(user);
                 } else {
-                    logger.error(
-                            "Sorry, user {} cannot be registered. User with this email already exists!",
-                            userFullName
-                    );
+                    logger.error("Sorry, user {} cannot be registered. User with this email already exists!",
+                            userFullName);
+                    throw new IllegalArgumentException("User with this email already exists!");
                 }
             } else {
-                logger.error(
-                        "Sorry, user {} cannot be registered. Invalid birth date or age restriction not met!",
-                        userFullName
-                );
+                logger.error("Sorry, user {} cannot be registered. Invalid birth date or age restriction not met!",
+                        userFullName);
+                throw new IllegalArgumentException("Invalid birth date or age restriction not met!");
             }
         } else {
             logger.error("UserDTO is null. Unable to register user.");
+            throw new IllegalArgumentException("UserDTO is null. Unable to register user.");
         }
     }
 
