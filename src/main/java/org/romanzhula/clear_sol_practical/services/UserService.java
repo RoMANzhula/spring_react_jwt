@@ -10,10 +10,8 @@ import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -36,8 +34,8 @@ public class UserService {
         if (userDTO != null) {
             String userFullName = userDTO.getFirstName() + " " + userDTO.getLastName();
             if (userDTO.getBirthDate() != null && validAgeRestriction(userDTO.getBirthDate())) {
-                User userFromDB = userRepository.findByEmail(userDTO.getEmail());
-                if (userFromDB == null) {
+                Optional<User> userFromDB = userRepository.findByEmail(userDTO.getEmail());
+                if (userFromDB.isEmpty()) {
                     User user = new User();
                     user.setEmail(userDTO.getEmail());
                     user.setFirstName(userDTO.getFirstName());

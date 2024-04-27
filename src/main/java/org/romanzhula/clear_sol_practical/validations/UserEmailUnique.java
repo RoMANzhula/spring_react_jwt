@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UserEmailUnique {
-    String message() default "User with this email existed yet!";
+    String message() default "User with this email existed yet! From @Validated (UserCreateMarker)";
 
     Class<?>[] groups() default {};
 

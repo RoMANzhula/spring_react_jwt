@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.romanzhula.clear_sol_practical.validations.UserCreateMarker;
 import org.romanzhula.clear_sol_practical.validations.UserEmailUnique;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 
@@ -19,10 +20,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
+    @Column(name = "user_id")
     private Long id;
 
-    @Column(unique = true, nullable = false)
-//    @NotEmpty(message = "Email cannot be empty!")
+    @Column(name = "email", nullable = false)
+    @NotEmpty(message = "Email cannot be empty!")
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
             message = "Invalid email format. Only letters, numbers, dots, and one @ symbol.")
     @Email

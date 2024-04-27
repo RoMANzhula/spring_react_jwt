@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Validated
 public class UserController {
@@ -35,6 +35,7 @@ public class UserController {
     /**
      * Example with validation marker
      * with exception handler to BadRequest
+     * without BindingResult
     */
     @Validated({UserCreateMarker.class})
     @PostMapping("/registration")
@@ -43,6 +44,12 @@ public class UserController {
             @Valid
             @RequestBody UserDTO userDTO
     ) {
+        if (userDTO.getFirstName().isEmpty()) {
+            return ResponseEntity
+                    .badRequest()
+                    .build()
+            ;
+        }
         userService.registerNewUser(userDTO);
 
         return ResponseEntity
@@ -50,6 +57,33 @@ public class UserController {
                 .body(new RegistrationResponse("User created successfully"))
         ;
     }
+
+    /**
+     * Example with validation marker
+     * with exception handler to BadRequest
+     * without BindingResult
+     */
+//    @PostMapping("/registration")
+//    public ResponseEntity<?> createUser(
+//            @ModelAttribute("userDTO")
+//            @Valid UserDTO userDTO,
+//            BindingResult bindingResult
+//    ) {
+//        if (!bindingResult.hasErrors()) {
+//            logger.error("Validation error! Check your input data.");
+//
+//            Map<String, String> errors = UtilsController.getBindingErrors(bindingResult);
+//
+//            return ResponseEntity
+//                    .badRequest()
+//                    .body(errors)
+//            ;
+//        }
+//
+//        userService.registerNewUser(userDTO);
+//
+//        return ResponseEntity.ok("User created successfully");
+//    }
 
     /**
      * Example with BindingResult
