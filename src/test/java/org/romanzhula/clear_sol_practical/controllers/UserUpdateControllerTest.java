@@ -94,6 +94,7 @@ public class UserUpdateControllerTest {
         // Given
         Long userId = 1L;
         var userDTO = UserDTO.builder()
+                .firstName("")
                 .email("test-test.test")
                 .build();
 
@@ -106,8 +107,7 @@ public class UserUpdateControllerTest {
                 )
                 .andReturn()
                 .getResponse()
-                ;
-
+        ;
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), mockResponse.getStatus());
         assertTrue(mockResponse.getContentAsString().contains("User first name cannot be empty!"));
