@@ -44,7 +44,27 @@ public class UserUpdateControllerTest {
     }
 
     @Test
-    public void testUpdateUserField_Success() {
+    public void testNotFullUpdateUserField_Success() {
+        // Given
+        Long userId = 1L;
+        UserDTO userDTO = UserDTO.builder()
+                .email("test123123@test.test")
+                .firstName("One")
+                .lastName("One")
+                .build();
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        // When
+        ResponseEntity<?> response = userController.updateUserField(userId, userDTO, bindingResult);
+
+        // Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("User's field(s) updated successfully", response.getBody());
+    }
+
+    @Test
+    public void testFullUpdateUserField_Success() {
         // Given
         Long userId = 1L;
         UserDTO userDTO = UserDTO.builder()
@@ -100,6 +120,7 @@ public class UserUpdateControllerTest {
 
         var content = objectMapper.writeValueAsString(userDTO);
 
+        //When
         var mockResponse = mockMvc
                 .perform(patch("/api/users/update-field/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -109,6 +130,7 @@ public class UserUpdateControllerTest {
                 .getResponse()
         ;
 
+        //Then
         assertEquals(HttpStatus.BAD_REQUEST.value(), mockResponse.getStatus());
         assertTrue(mockResponse.getContentAsString().contains("User first name cannot be empty!"));
 
