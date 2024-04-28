@@ -10,6 +10,8 @@ import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,5 +122,9 @@ public class UserService {
             throw new EntityNotFoundException("Sorry, user cannot be update whole. User with id " +
                     userId + " NOT FOUND!");
         }
+    }
+
+    public UserDetails findUserByUserName(String email) {
+        return userRepository.findByEmail(email).orElseThrow();
     }
 }
