@@ -5,7 +5,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.romanzhula.clear_sol_practical.dto.UserDTO;
-import org.romanzhula.clear_sol_practical.json_responsies.CreateUserResponse;
+import org.romanzhula.clear_sol_practical.controllers.json_responses.CreateUserResponse;
 import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.romanzhula.clear_sol_practical.services.UserService;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package org.romanzhula.clear_sol_practical.json_responsies;
+package org.romanzhula.clear_sol_practical.controllers.json_responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

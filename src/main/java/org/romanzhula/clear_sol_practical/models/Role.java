@@ -2,6 +2,7 @@ package org.romanzhula.clear_sol_practical.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.romanzhula.clear_sol_practical.models.enums.EnumRole;
@@ -10,8 +11,8 @@ import org.romanzhula.clear_sol_practical.models.enums.EnumRole;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "roles")
-
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +25,8 @@ public class Role {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staff_id")
     private Staff staffMember;
+
+    public Role(String roleUser) {
+    }
 
 }

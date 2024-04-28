@@ -3,7 +3,7 @@ package org.romanzhula.clear_sol_practical.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.romanzhula.clear_sol_practical.dto.UserDTO;
-import org.romanzhula.clear_sol_practical.json_responsies.CreateUserResponse;
+import org.romanzhula.clear_sol_practical.controllers.json_responses.CreateUserResponse;
 import org.romanzhula.clear_sol_practical.models.User;
 import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.romanzhula.clear_sol_practical.services.UserService;
