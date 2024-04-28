@@ -22,7 +22,7 @@ public class Role {
     private EnumRole name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "staff_id")
+    private Staff staffMember;
 
 }

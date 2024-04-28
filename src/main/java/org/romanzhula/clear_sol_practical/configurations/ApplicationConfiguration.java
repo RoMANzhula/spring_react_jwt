@@ -1,7 +1,7 @@
 package org.romanzhula.clear_sol_practical.configurations;
 
 import lombok.RequiredArgsConstructor;
-import org.romanzhula.clear_sol_practical.services.UserService;
+import org.romanzhula.clear_sol_practical.repositories.StaffRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,11 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
 
-    private final UserService userService;
+    private final StaffRepository staffRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return userService::loadUserByUsername;
+        return username -> staffRepository.findByUsername(username).orElseThrow();
     }
 
     @Bean

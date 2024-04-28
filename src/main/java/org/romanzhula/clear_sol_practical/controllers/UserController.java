@@ -3,7 +3,7 @@ package org.romanzhula.clear_sol_practical.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.romanzhula.clear_sol_practical.dto.UserDTO;
-import org.romanzhula.clear_sol_practical.json_responsies.RegistrationResponse;
+import org.romanzhula.clear_sol_practical.json_responsies.CreateUserResponse;
 import org.romanzhula.clear_sol_practical.models.User;
 import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.romanzhula.clear_sol_practical.services.UserService;
@@ -38,8 +38,8 @@ public class UserController {
      * without BindingResult
     */
     @Validated({UserCreateMarker.class})
-    @PostMapping("/registration")
-    public ResponseEntity<RegistrationResponse> createUser(
+    @PostMapping("/create")
+    public ResponseEntity<CreateUserResponse> createUser(
             @ModelAttribute("userDTO")
             @Valid
             @RequestBody UserDTO userDTO
@@ -55,7 +55,7 @@ public class UserController {
 
         return ResponseEntity
                 .ok()
-                .body(new RegistrationResponse("User created successfully"))
+                .body(new CreateUserResponse("User created successfully"))
         ;
     }
 

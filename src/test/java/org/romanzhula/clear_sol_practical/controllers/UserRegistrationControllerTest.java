@@ -5,7 +5,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.romanzhula.clear_sol_practical.dto.UserDTO;
-import org.romanzhula.clear_sol_practical.json_responsies.RegistrationResponse;
+import org.romanzhula.clear_sol_practical.json_responsies.CreateUserResponse;
 import org.romanzhula.clear_sol_practical.repositories.UserRepository;
 import org.romanzhula.clear_sol_practical.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -50,7 +50,7 @@ class UserRegistrationControllerTest {
         ;
 
         // When
-        ResponseEntity<RegistrationResponse> response = userController.createUser(userDTO);
+        ResponseEntity<CreateUserResponse> response = userController.createUser(userDTO);
 
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -74,7 +74,7 @@ class UserRegistrationControllerTest {
         ;
 
         // When
-        ResponseEntity<RegistrationResponse> response = userController.createUser(userDTO);
+        ResponseEntity<CreateUserResponse> response = userController.createUser(userDTO);
 
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -98,7 +98,7 @@ class UserRegistrationControllerTest {
         ;
 
         // When
-        ResponseEntity<RegistrationResponse> response = userController.createUser(userDTO);
+        ResponseEntity<CreateUserResponse> response = userController.createUser(userDTO);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
