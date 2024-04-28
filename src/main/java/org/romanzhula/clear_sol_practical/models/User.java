@@ -1,5 +1,6 @@
 package org.romanzhula.clear_sol_practical.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,6 +49,10 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "password")
+    @JsonIgnore
+    private String password;
+
     @Column(name = "roles")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
@@ -61,32 +65,27 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return "";
-    }
-
-    @Override
     public String getUsername() {
-        return "";
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
