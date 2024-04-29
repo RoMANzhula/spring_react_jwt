@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.romanzhula.clear_sol_practical.models.enums.EnumRole;
 
-import java.util.Set;
-
 @Entity
 @Data
 @AllArgsConstructor
