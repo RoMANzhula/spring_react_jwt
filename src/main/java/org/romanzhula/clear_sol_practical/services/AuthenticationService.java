@@ -5,6 +5,8 @@ import org.romanzhula.clear_sol_practical.configurations.jwt.services.JwtService
 import org.romanzhula.clear_sol_practical.controllers.json_requests.LoginStaffRequest;
 import org.romanzhula.clear_sol_practical.controllers.json_requests.RegistrationStaffRequest;
 import org.romanzhula.clear_sol_practical.controllers.json_responses.AuthResponse;
+import org.romanzhula.clear_sol_practical.dto.StaffDTO;
+import org.romanzhula.clear_sol_practical.mappers.StaffMapper;
 import org.romanzhula.clear_sol_practical.models.Role;
 import org.romanzhula.clear_sol_practical.models.Staff;
 import org.romanzhula.clear_sol_practical.models.enums.EnumRole;
@@ -28,15 +30,15 @@ public class AuthenticationService {
 
     public AuthResponse registrationStaffMember(RegistrationStaffRequest request) {
 
-
-
-        var newStaffMember = Staff.builder()
+        var newStaffDtoMember = StaffDTO.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build()
         ;
+
+        Staff newStaffMember = StaffMapper.INSTANCE.toStaffModel(newStaffDtoMember);
 
         var userRole = Role.builder()
                 .name(EnumRole.ROLE_USER)
