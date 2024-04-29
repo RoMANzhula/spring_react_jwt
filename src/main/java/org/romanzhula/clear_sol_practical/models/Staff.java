@@ -46,7 +46,7 @@ public class Staff implements UserDetails {
     private String password;
 
     @Column(name = "roles")
-    @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
     @Override
