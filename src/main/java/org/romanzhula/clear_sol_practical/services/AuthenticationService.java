@@ -7,6 +7,7 @@ import org.romanzhula.clear_sol_practical.controllers.json_requests.Registration
 import org.romanzhula.clear_sol_practical.controllers.json_responses.AuthResponse;
 import org.romanzhula.clear_sol_practical.models.Role;
 import org.romanzhula.clear_sol_practical.models.Staff;
+import org.romanzhula.clear_sol_practical.models.enums.EnumRole;
 import org.romanzhula.clear_sol_practical.repositories.StaffRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,12 +27,24 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse registrationStaffMember(RegistrationStaffRequest request) {
+
+
+
         var newStaffMember = Staff.builder()
                 .username(request.getUsername())
+                .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(new HashSet<>(List.of(new Role("ROLE_USER"))))
                 .build()
         ;
+
+        var userRole = Role.builder()
+                .name(EnumRole.ROLE_USER)
+                .staffMember(newStaffMember)
+                .build()
+        ;
+
+        newStaffMember.setRoles(new HashSet<>(List.of(userRole)));
 
         staffRepository.save(newStaffMember);
 

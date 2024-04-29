@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.romanzhula.clear_sol_practical.models.enums.EnumRole;
 
+import java.util.Set;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -22,11 +24,8 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private EnumRole name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staffMember;
-
-    public Role(String roleUser) {
-    }
 
 }

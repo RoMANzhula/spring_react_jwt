@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,7 +46,7 @@ public class Staff implements UserDetails {
     private String password;
 
     @Column(name = "roles")
-    @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL)
     private Set<Role> roles = new HashSet<>();
 
     @Override
@@ -54,10 +56,6 @@ public class Staff implements UserDetails {
                 .collect(Collectors.toSet());
     }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -77,5 +75,24 @@ public class Staff implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Staff staff = (Staff) o;
+        return Objects.equals(id, staff.id) &&
+                Objects.equals(email, staff.email) &&
+                Objects.equals(username, staff.username) &&
+                Objects.equals(phoneNumber, staff.phoneNumber) &&
+                Objects.equals(password, staff.password) &&
+                Objects.equals(roles, staff.roles
+        );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, username, phoneNumber, password, roles);
     }
 }
