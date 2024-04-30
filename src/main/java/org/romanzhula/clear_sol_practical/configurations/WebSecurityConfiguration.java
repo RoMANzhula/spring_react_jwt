@@ -1,6 +1,7 @@
 package org.romanzhula.clear_sol_practical.configurations;
 
 import lombok.RequiredArgsConstructor;
+import org.romanzhula.clear_sol_practical.configurations.jwt.config.AuthEntryPointJwt;
 import org.romanzhula.clear_sol_practical.configurations.jwt.filters.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,13 +26,16 @@ public class WebSecurityConfiguration {
 
     private final JwtFilter jwtFilter;
 
+    private final AuthEntryPointJwt unauthorizedHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
