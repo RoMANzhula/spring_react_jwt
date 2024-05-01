@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from "react";
-import UserService from "../../services/user.service"
+import { useEffect, useState } from "react"
+import UserService from "../../services/user.service";
 import eventBus from "../../common/EventBus";
 
 
-const UserContent = () => {
+const ModeratorContent = () => {
   const [content, setContent] = useState("");
 
   useEffect(() => {
-    UserService.getUserContent().then(
+    UserService.getModeratorContent().then(
       (response) => {
         setContent(response.data);
-      
       },
       (error) => {
         const contentValue = 
-          (error.response &&
-          error.response.data &&
+        (error.response &&
+        error.response.data &&
         error.response.data.message) ||
         error.message ||
         error.toString();
 
         setContent(contentValue);
 
-        if (error.response && error.response.status == 401) {
+        if (error.response && error.response.status === 401) {
           eventBus.dispatch("logout");
         }
       }
     );
-
   }, []);
 
   return (
@@ -39,4 +37,5 @@ const UserContent = () => {
   );
 };
 
-export default UserContent;
+export default ModeratorContent;
+
