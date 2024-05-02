@@ -15,10 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -35,11 +32,11 @@ public class Staff implements UserDetails {
     @Column(name = "staff_id")
     private Long id;
 
-    @Column(name = "email", nullable = false, unique = true)
-    @NotEmpty(message = "Email cannot be empty!")
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-            message = "Invalid email format. Only letters, numbers, dots, and one @ symbol.")
-    @Email
+//    @Column(name = "email", nullable = false, unique = true)
+//    @NotEmpty(message = "Email cannot be empty!")
+//    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+//            message = "Invalid email format. Only letters, numbers, dots, and one @ symbol.")
+//    @Email
     private String email;
 
     @Column(name = "user_name", nullable = false, unique = true)
@@ -60,6 +57,9 @@ public class Staff implements UserDetails {
     @Column(name = "roles")
     @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "staffMember")
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
