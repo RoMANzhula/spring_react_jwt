@@ -108,17 +108,14 @@ class UserServiceTest {
                 .birthDate(LocalDate.of(2000, 10, 29))
                 .address("1223 Main St")
                 .phoneNumber("12345678901")
-                .build()
-        ;
+                .build();
 
-        when(userRepository.findByEmail("testemail1@test.test")).thenReturn(Optional.of(new User()));
+        when(userRepository.findUserByEmail("testemail1@test.test")).thenReturn(Optional.of(new User()));
 
         // When & Then
-        IllegalArgumentException exception =
-                assertThrows(IllegalArgumentException.class, () ->
-                        userService.registerNewUser(userDTO)
-                )
-        ;
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                userService.registerNewUser(userDTO)
+        );
 
         String expectedMessage = "User with this email already exists!";
         String actualMessage = exception.getMessage();
