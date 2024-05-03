@@ -33,7 +33,7 @@ public class UserService {
         if (userDTO != null) {
             String userFullName = userDTO.getFirstName() + " " + userDTO.getLastName();
             if (userDTO.getBirthDate() != null && validAgeRestriction(userDTO.getBirthDate())) {
-                Optional<User> userFromDB = userRepository.findByEmail(userDTO.getEmail());
+                Optional<User> userFromDB = userRepository.findUserByEmail(userDTO.getEmail());
                 if (userFromDB.isEmpty()) {
                     User user = new User();
                         user.setEmail(userDTO.getEmail());
@@ -118,7 +118,8 @@ public class UserService {
         } else {
             logger.error("Sorry, user cannot be update whole. User with id {} NOT FOUND!", userId);
             throw new EntityNotFoundException("Sorry, user cannot be update whole. User with id " +
-                    userId + " NOT FOUND!");
+                    userId + " NOT FOUND!")
+            ;
         }
     }
 

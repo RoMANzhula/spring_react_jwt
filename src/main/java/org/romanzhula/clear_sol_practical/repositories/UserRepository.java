@@ -15,4 +15,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByBirthDateBetween(LocalDate from, LocalDate to);
 
+    Optional<User> findUserByEmail(String email);
 }

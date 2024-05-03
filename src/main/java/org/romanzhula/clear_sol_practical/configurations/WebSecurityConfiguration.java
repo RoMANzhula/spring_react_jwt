@@ -1,5 +1,6 @@
 package org.romanzhula.clear_sol_practical.configurations;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.romanzhula.clear_sol_practical.configurations.jwt.config.AuthEntryPointJwt;
 import org.romanzhula.clear_sol_practical.configurations.jwt.filters.JwtFilter;
@@ -33,9 +34,18 @@ public class WebSecurityConfiguration {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        })
+                )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/content/**").permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/content/**",
+                                "/css/**",
+                                "/js/**"
+                        ).permitAll()
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
@@ -55,7 +65,7 @@ public class WebSecurityConfiguration {
                 .headers((headers) ->
                         headers
                                 .frameOptions((frameOptions) -> frameOptions.disable())
-                );
+                )
         ;
 
         return httpSecurity.build();

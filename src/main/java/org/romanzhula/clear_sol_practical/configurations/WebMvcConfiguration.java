@@ -15,16 +15,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public WebMvcConfigurer configure() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins(allowedOrigin)
-                        .allowedMethods("*")
-                        .allowedHeaders("*")
-                        .allowCredentials(false)
-                        .maxAge(3600);
+            public void addCorsMappings(CorsRegistry reg) {
+                reg.addMapping("/**").allowedOrigins(allowedOrigin);
             }
         };
     }
