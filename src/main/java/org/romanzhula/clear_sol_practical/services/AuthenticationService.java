@@ -9,12 +9,16 @@ import org.romanzhula.clear_sol_practical.dto.StaffDTO;
 import org.romanzhula.clear_sol_practical.mappers.StaffMapper;
 import org.romanzhula.clear_sol_practical.models.Role;
 import org.romanzhula.clear_sol_practical.models.Staff;
+import org.romanzhula.clear_sol_practical.models.Token;
 import org.romanzhula.clear_sol_practical.models.enums.EnumRole;
+import org.romanzhula.clear_sol_practical.repositories.RoleRepository;
 import org.romanzhula.clear_sol_practical.repositories.StaffRepository;
+import org.romanzhula.clear_sol_practical.repositories.TokenRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,8 +31,13 @@ public class AuthenticationService {
     private final StaffRepository staffRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final TokenRepository tokenRepository;
+    private final RoleRepository roleRepository;
 
-    public AuthResponse registrationStaffMember(RegistrationStaffRequest request) {
+    @Transactional
+    public AuthResponse registrationStaffMember(
+            RegistrationStaffRequest request
+    ) {
 
         var newStaffDtoMember = StaffDTO.builder()
                 .username(request.getUsername())
@@ -40,24 +49,30 @@ public class AuthenticationService {
 
         Staff newStaffMember = StaffMapper.INSTANCE.toStaffModel(newStaffDtoMember);
 
+        if (newStaffMember.getRoles() == null) {
+            newStaffMember.setRoles(new HashSet<>());
+        }
+
         var userRole = Role.builder()
                 .name(EnumRole.ROLE_USER)
-                .staffMember(newStaffMember)
                 .build()
         ;
 
-        newStaffMember.setRoles(new HashSet<>(List.of(userRole)));
+        roleRepository.save(userRole);
+
+        newStaffMember.getRoles().add(userRole);
 
         staffRepository.save(newStaffMember);
 
         var jwtToken = jwtService.generateToken(newStaffMember);
 
         return AuthResponse.builder()
-                .token(jwtToken)
+                .accessToken(jwtToken)
                 .build()
         ;
     }
 
+    @Transactional
     public AuthResponse loginStaffMember(LoginStaffRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -66,13 +81,43 @@ public class AuthenticationService {
                 )
         );
 
-        var loginStaffMember = staffRepository.findByUsername(request.getUsername());
+        Staff newStaffMember = staffRepository.findByUsername(request.getUsername()).orElseThrow();
+        var jwtToken = jwtService.generateToken(newStaffMember);
 
-        var jwtToken = jwtService.generateToken(loginStaffMember.orElseThrow());
+        revokeAllTokenByStaffMember(newStaffMember);
+        saveStaffMemberToken(jwtToken, newStaffMember);
 
         return AuthResponse.builder()
-                .token(jwtToken)
+                .accessToken(jwtToken)
+                .user(newStaffMember)
                 .build()
         ;
     }
+
+    private void revokeAllTokenByStaffMember(
+            Staff staffMember
+    ) {
+        List<Token> validTokens = tokenRepository.findAllTokensByUser(staffMember.getId());
+        if(validTokens.isEmpty()) {
+            return;
+        }
+
+        validTokens.forEach(t-> {
+            t.setLoggedOut(true);
+        });
+
+        tokenRepository.saveAll(validTokens);
+    }
+
+    private void saveStaffMemberToken(
+            String jwt,
+            Staff staffMember
+    ) {
+        Token token = new Token();
+        token.setToken(jwt);
+        token.setLoggedOut(false);
+        token.setStaffMember(staffMember);
+        tokenRepository.save(token);
+    }
+
 }

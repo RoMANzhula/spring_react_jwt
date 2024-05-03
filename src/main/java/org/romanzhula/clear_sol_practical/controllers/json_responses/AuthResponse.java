@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.romanzhula.clear_sol_practical.models.Staff;
 
 @Data
 @Builder
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthResponse {
 
-    private String token;
+    private String accessToken;
+
+    private Staff user;
 
 }
