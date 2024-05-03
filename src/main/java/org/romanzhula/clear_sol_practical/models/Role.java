@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.romanzhula.clear_sol_practical.models.enums.EnumRole;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -22,8 +25,7 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private EnumRole name;
 
-    @ManyToOne
-    @JoinColumn(name = "staff_id")
-    private Staff staffMember;
+    @ManyToMany(mappedBy = "roles")
+    private Set<Staff> staffMembers = new HashSet<>();
 
 }

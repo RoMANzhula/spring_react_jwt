@@ -13,13 +13,11 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-@Validated
 @Data
 @Builder
 @AllArgsConstructor
@@ -32,11 +30,11 @@ public class Staff implements UserDetails {
     @Column(name = "staff_id")
     private Long id;
 
-//    @Column(name = "email", nullable = false, unique = true)
-//    @NotEmpty(message = "Email cannot be empty!")
-//    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-//            message = "Invalid email format. Only letters, numbers, dots, and one @ symbol.")
-//    @Email
+    @Column(name = "email", nullable = false, unique = true)
+    @NotEmpty(message = "Email cannot be empty!")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            message = "Invalid email format. Only letters, numbers, dots, and one @ symbol.")
+    @Email
     private String email;
 
     @Column(name = "user_name", nullable = false, unique = true)
@@ -54,8 +52,11 @@ public class Staff implements UserDetails {
     @Length(max = 255, message = "Message too long (limit - 255 B)")
     private String password;
 
-    @Column(name = "roles")
-    @OneToMany(mappedBy = "staffMember", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "staff_roles",
+            joinColumns = @JoinColumn(name = "staff_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "staffMember")
