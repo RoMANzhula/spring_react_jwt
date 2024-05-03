@@ -3,12 +3,12 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8080/api/auth";
 
-const register = (email, username, password, phone) => {
+const register = (username, email, password, phoneNumber) => {
   return axios.post(API_URL + "/registration", {
-    email,
     username,
+    email,
     password,
-    phone,
+    phoneNumber,
   });
 };
 
@@ -18,8 +18,8 @@ const login = (username, password) => {
     password,
   })
   .then((response) => {
-    if (response.data.username) {
-      localStorage.setItem("userToken", JSON.stringify(response.data.token));
+    if (response.data.accessToken) {
+      localStorage.setItem("user", JSON.stringify(response.data));
     }
 
     return response.data;
@@ -27,7 +27,7 @@ const login = (username, password) => {
 };
 
 const logout = () => {
-  localStorage.removeItem("userToken");
+  localStorage.removeItem("user");
 
   return axios.post(API_URL + "/logout").then((response) => {
     return response.data;
@@ -35,13 +35,13 @@ const logout = () => {
 };
 
 const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("userToken"));
+  return JSON.parse(localStorage.getItem("user"));
 };
 
 const AuthService = {
   register,
   login,
-  login,
+  logout,
   getCurrentUser,
 }
 

@@ -1,28 +1,30 @@
-import axios from "axios";
+import axios from 'axios';
+import authHeader from './auth-header';
 
-const API_URL = "http://localhost:8080/api/content"
+const API_URL = 'http://localhost:8080/api/content';
 
-const getPublicContent = () => {
-  return axios.get(API_URL + "/public");
-};
+  const getPublicContent = () => {
+    return axios.get(API_URL + '/public');
+  };
 
-const getUserContent = () => {
-  return axios.get(API_URL + "/user");
-};
+  const getUserContent = () => {
+    return axios.get(API_URL + '/user', { headers: authHeader() });
+  };
 
-const getModeratorContent = () => {
-  return axios.get(API_URL + "/moderator");
-};
+  const getModeratorContent = () => {
+    return axios.get(API_URL + '/moderator', { headers: authHeader() });
+  };
 
-const getAdminContent = () => {
-  return axios.get(API_URL + "/admin");
-};
+  const getAdminContent = () => {
+    return axios.get(API_URL + '/admin', { headers: authHeader() });
+  };
 
-const UserService = {
-  getPublicContent,
-  getUserContent,
-  getModeratorContent,
-  getAdminContent,
-}
-
-export default UserService;
+  const UserService = {
+    getPublicContent,
+    getUserContent,
+    getModeratorContent,
+    getAdminContent,
+  };
+  
+  export default UserService;
+  
