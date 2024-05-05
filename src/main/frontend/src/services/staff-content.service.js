@@ -19,12 +19,12 @@ const API_URL = 'http://localhost:8080/api/content';
     return axios.get(API_URL + '/admin', { headers: authHeader() });
   };
 
-  const UserService = {
+  const StaffService = {
     getPublicContent,
     getUserContent,
     getModeratorContent,
     getAdminContent,
   };
   
-  export default UserService;
+  export default StaffService;
   

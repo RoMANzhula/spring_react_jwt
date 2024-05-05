@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import UserService from "../../services/staff-content.service";
+import StaffService from "../../services/staff-content.service";
 import eventBus from "../../common/EventBus";
 
 
@@ -7,7 +7,7 @@ const UserContent = () => {
   const [content, setContent] = useState("");
 
   useEffect(() => {
-    UserService.getUserContent().then(
+    StaffService.getUserContent().then(
       (response) => {
         setContent(response.data);
       
