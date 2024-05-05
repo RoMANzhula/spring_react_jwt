@@ -1,111 +1,95 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import AuthService from "../../services/auth.service";
 
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Email format is not correct!')
+    .required('Email is required!'),
+  username: Yup.string()
+    .min(2, 'Username is too short! (min length 2)')
+    .max(255, 'Username is too long! (max length 255)')
+    .required('Username is required!'),
+  password: Yup.string()
+    .min(4, 'Password is too short! (min 4 char)')
+    .max(255, 'Password is too long! (max 255 char)')
+    .required('Password is required!'),
+  phone: Yup.string()
+    .min(9, 'Min 9 digits!')
+    .max(15, 'Max 15 digits!')
+    .required('Phone number is required!'),
+});
+
 const Registration = () => {
-  const form = useRef();
   const navigate = useNavigate();
-
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  const onChangeUsername = (e) => setUsername(e.target.value);
-  const onChangeEmail = (e) => setEmail(e.target.value);
-  const onChangePassword = (e) => setPassword(e.target.value);
-  const onChangePhone = (e) => setPhone(e.target.value);
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setMessage("");
-    setLoading(true);
-
-    try {
-      await AuthService.register(username, email, password, phone);
-      navigate("/login");
-      window.location.reload();
-    } catch (error) {
-      const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-
-      setLoading(false);
-      setMessage(resMessage);
-    }
-  };
 
   return (
     <div className="col-md-12">
       <div className="card card-container">
-        <form onSubmit={handleRegister} ref={form}>
-          
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              className="form-control"
-              name="email"
-              value={email}
-              onChange={onChangeEmail}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              className="form-control"
-              name="username"
-              value={username}
-              onChange={onChangeUsername}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              className="form-control"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="phoneNumber">Phone</label>
-            <input
-              type="text"
-              className="form-control"
-              name="phoneNumber"
-              value={phone}
-              onChange={onChangePhone}
-            />
-          </div>
-
-          <div className="form-group">
-            <button className="btn btn-primary btn-block" disabled={loading}>
-              {loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
-              <span>Register</span>
-            </button>
-          </div>
-
-          {message && (
-            <div className="form-group">
-              <div className="alert alert-danger" role="alert">
-                {message}
+        <Formik
+          initialValues={{
+            email: '',
+            username: '',
+            password: '',
+            phone: ''
+          }}
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting }) => {
+            setMessage("");
+            try {
+              await AuthService.register(values.username, values.email, values.password, values.phone);
+              navigate("/login");
+              window.location.reload();
+            } catch (error) {
+              const resMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+              setMessage(resMessage);
+            }
+            setSubmitting(false);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <Field type="email" name="email" className="form-control" />
+                <ErrorMessage name="email" component="div" className="error" />
               </div>
-            </div>
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <Field type="text" name="username" className="form-control" />
+                <ErrorMessage name="username" component="div" className="error" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <Field type="password" name="password" className="form-control" />
+                <ErrorMessage name="password" component="div" className="error" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone">Phone</label>
+                <Field type="text" name="phone" className="form-control" />
+                <ErrorMessage name="phone" component="div" className="error" />
+              </div>
+              <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>
+                {isSubmitting ? 'Зачекайте...' : 'Зареєструватися'}
+              </button>
+              {message && (
+                <div className="form-group">
+                  <div className="alert alert-danger" role="alert">
+                    {message}
+                  </div>
+                </div>
+              )}
+            </Form>
           )}
-        </form>
+        </Formik>
       </div>
     </div>
   );

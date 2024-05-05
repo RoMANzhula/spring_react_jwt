@@ -12,3 +12,6 @@
 
 5. Add axios (maybe can be a first step)
       npm install axios
+
+6. Add Formik and Yup for validation
+      npm install formik yup
