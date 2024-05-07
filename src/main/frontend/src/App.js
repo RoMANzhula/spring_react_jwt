@@ -10,6 +10,7 @@ import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import "./App.css"
 import Profile from "./components/profile/Profile";
+import CreateUserPage from "./components/userTools/CreateUserForm";
 
 
 const App = () => {
@@ -81,6 +82,14 @@ const App = () => {
             </li>
           )}
 
+          {showContentAdmin && (
+            <li className="nav-item">
+              <Link to={"/create-user"} className="nav-link">
+                Create User
+              </Link>
+            </li>
+          )}
+
           {currentUser && (
             <li className="nav-item">
               <Link to={"/user"} className="nav-link">
@@ -130,6 +139,9 @@ const App = () => {
           <Route path="/user" element={<UserContent />} />
           <Route path="/moderator" element={<ModeratorContent />} />
           <Route path="/admin" element={<AdminContent />} />
+          {showContentAdmin && (
+            <Route path="/create-user" element={<CreateUserPage />} />
+          )}
         </Routes>
       </div>
     </div>
