@@ -3,10 +3,7 @@ package org.romanzhula.clear_sol_practical.dto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +11,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.romanzhula.clear_sol_practical.validations.UserCreateMarker;
 import org.romanzhula.clear_sol_practical.validations.UserEmailUnique;
+import org.romanzhula.clear_sol_practical.validations.ValidAge;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Data
 @Builder
@@ -49,6 +48,7 @@ public class UserDTO {
     @Column(name = "birth_date", nullable = false)
     @Temporal(value = TemporalType.DATE)
     @Past(message = "Only past data!")
+    @ValidAge(message = "User must be at least 18 years old.")
     private LocalDate birthDate;
 
     @Length(max = 255, message = "Message too long (limit - 255 B)")
