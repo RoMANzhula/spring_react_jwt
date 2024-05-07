@@ -20,6 +20,7 @@ public class Token {
     private Long id;
 
     private String token;
+
     @Column(name = "is_log_out")
     private Boolean loggedOut;
 

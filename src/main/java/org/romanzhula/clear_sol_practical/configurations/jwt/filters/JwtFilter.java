@@ -19,7 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private static final String AUTH_HEADER = "Authorization";
-    private static final String BEARER_KEYWORD_IN_HEADER = "Bearer";
+    private static final String BEARER_KEYWORD_IN_HEADER = "Bearer ";
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
@@ -37,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        var jwt = authHeader.substring(BEARER_KEYWORD_IN_HEADER.length() + 1);
+        var jwt = authHeader.substring(BEARER_KEYWORD_IN_HEADER.length());
 
         var username = jwtService.extractUsernameFromToken(jwt);
 

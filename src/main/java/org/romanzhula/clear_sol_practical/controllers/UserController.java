@@ -26,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Validated
-@PreAuthorize("hasRole('ADMIN')")
+//@CrossOrigin
 public class UserController {
 
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -40,9 +40,9 @@ public class UserController {
      * without BindingResult
     */
     @Validated({UserCreateMarker.class})
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<CreateUserResponse> createUser(
-            @ModelAttribute("userDTO")
             @Valid
             @RequestBody UserDTO userDTO
     ) {
@@ -68,7 +68,7 @@ public class UserController {
      */
 //    @PostMapping("/registration")
 //    public ResponseEntity<?> createUser(
-//            @ModelAttribute("userDTO")
+////            @ModelAttribute("userDTO")
 //            @Valid UserDTO userDTO,
 //            BindingResult bindingResult
 //    ) {
@@ -184,9 +184,9 @@ public class UserController {
         ;
     }
 
-    @ModelAttribute("userDTO")
-    public UserDTO userDTO() {
-        return new UserDTO();
-    }
+//    @ModelAttribute("userDTO")
+//    public UserDTO userDTO() {
+//        return new UserDTO();
+//    }
 
 }

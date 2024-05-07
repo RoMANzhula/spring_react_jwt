@@ -3,7 +3,10 @@ package org.romanzhula.clear_sol_practical.dto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +14,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.romanzhula.clear_sol_practical.validations.UserCreateMarker;
 import org.romanzhula.clear_sol_practical.validations.UserEmailUnique;
-import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 
