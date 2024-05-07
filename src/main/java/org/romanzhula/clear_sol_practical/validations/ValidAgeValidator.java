@@ -19,11 +19,11 @@ public class ValidAgeValidator implements ConstraintValidator<ValidAge, LocalDat
     @Override
     public boolean isValid(LocalDate birthDate, ConstraintValidatorContext context) {
         if (birthDate == null) {
-            return false; // Якщо дата народження не вказана, то вона не валідна
+            return false;
         }
-        // Обчислюємо різницю віку між датою народження і поточною датою
+
         Period period = Period.between(birthDate, LocalDate.now());
-        // Перевіряємо, чи користувачу не менше 18 років
+        
         return period.getYears() >= ageRestriction;
     }
 }
