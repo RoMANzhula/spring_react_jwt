@@ -45,6 +45,7 @@ public class Staff implements UserDetails {
     @Column(name = "phone_number", nullable = false, unique = true)
     @NotEmpty(message = "Phone number cannot be empty!")
     @Length(min = 9, max = 15, message = "Number is short/long (limit - from 9 to 15 characters)")
+    @Pattern(regexp = "\\+?\\d+", message = "Phone number must contain only digits and may start with a plus sign")
     private String phoneNumber;
 
     @Column(name = "password", nullable = false)

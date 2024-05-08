@@ -65,7 +65,6 @@ const CreateUserPage = () => {
         });
     } catch (error) {
         if (error.response && error.response.data) {
-            // Отримуємо текст помилки з відповіді сервера
             const errorMessage = error.response.data;
             setMessage(errorMessage);
         } else {

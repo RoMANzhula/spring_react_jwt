@@ -19,12 +19,12 @@ const validationSchema = Yup.object().shape({
   phone: Yup.string()
     .min(9, 'Min 9 digits!')
     .max(15, 'Max 15 digits!')
+    .matches(/^\+?\d+$/, 'Phone number must contain only digits and may start with a plus sign')
     .required('Phone number is required!'),
 });
 
 const Registration = () => {
   const navigate = useNavigate();
-  const [message, setMessage] = useState("");
 
   return (
     <div className="col-md-12">
@@ -37,20 +37,15 @@ const Registration = () => {
             phone: ''
           }}
           validationSchema={validationSchema}
-          onSubmit={async (values, { setSubmitting }) => {
-            setMessage("");
+          onSubmit={async (values, { setSubmitting, setErrors }) => {
             try {
               await AuthService.register(values.username, values.email, values.password, values.phone);
               navigate("/login");
               window.location.reload();
             } catch (error) {
-              const resMessage =
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                error.message ||
-                error.toString();
-              setMessage(resMessage);
+              if (error.response && error.response.data) {
+                setErrors(error.response.data);
+              }
             }
             setSubmitting(false);
           }}
@@ -78,15 +73,8 @@ const Registration = () => {
                 <ErrorMessage name="phone" component="div" className="error" />
               </div>
               <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>
-                {isSubmitting ? 'Зачекайте...' : 'Зареєструватися'}
+                {isSubmitting ? 'Wait...' : 'Registration'}
               </button>
-              {message && (
-                <div className="form-group">
-                  <div className="alert alert-danger" role="alert">
-                    {message}
-                  </div>
-                </div>
-              )}
             </Form>
           )}
         </Formik>
@@ -96,4 +84,3 @@ const Registration = () => {
 };
 
 export default Registration;
-
