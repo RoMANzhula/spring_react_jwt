@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -101,4 +103,21 @@ public class UserService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(UserMapper.INSTANCE::toUserDTO)
+                .collect(Collectors.toList())
+        ;
+    }
+
+    @Transactional(readOnly = true)
+    public UserDTO getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        return UserMapper.INSTANCE.toUserDTO(user);
+    }
+    
 }

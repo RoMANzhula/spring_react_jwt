@@ -68,7 +68,6 @@ public class UserController {
      */
 //    @PostMapping("/registration")
 //    public ResponseEntity<?> createUser(
-////            @ModelAttribute("userDTO")
 //            @Valid UserDTO userDTO,
 //            BindingResult bindingResult
 //    ) {
@@ -93,6 +92,7 @@ public class UserController {
      * with wrapping binding errors to string VS field
      */
     @PatchMapping("/update-field/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUserField(
             @PathVariable Long userId,
             @Valid
@@ -184,9 +184,23 @@ public class UserController {
         ;
     }
 
-//    @ModelAttribute("userDTO")
-//    public UserDTO userDTO() {
-//        return new UserDTO();
-//    }
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
+
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> getUser(
+            @PathVariable Long userId
+    ) {
+        UserDTO user = userService.getUserById(userId);
+
+        return ResponseEntity.ok(user);
+    }
+
 
 }
