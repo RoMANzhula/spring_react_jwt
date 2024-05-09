@@ -9,10 +9,6 @@ import java.util.List;
 
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
-    @Query("""
-    select t from Token t inner join User u on t.staffMember.id = u.id
-    where t.staffMember.id = :userId and t.loggedOut = false
-    """)
-    List<Token> findAllTokensByUser(Long userId);
 
+    List<Token> findAllTokensByStaffMember_Id(Long id);
 }

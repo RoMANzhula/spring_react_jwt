@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,10 +54,17 @@ public class AuthenticationService {
             newStaffMember.setRoles(new HashSet<>());
         }
 
-        var userRole = Role.builder()
-                .name(EnumRole.ROLE_USER)
-                .build()
-        ;
+        Optional<Role> userRoleOptional = roleRepository.findByName(EnumRole.ROLE_USER);
+        Role userRole;
+
+        if (userRoleOptional.isPresent()) {
+            userRole = userRoleOptional.get();
+        } else {
+            userRole = Role.builder()
+                    .name(EnumRole.ROLE_USER)
+                    .build();
+            roleRepository.save(userRole);
+        }
 
         roleRepository.save(userRole);
 
@@ -97,7 +105,7 @@ public class AuthenticationService {
     private void revokeAllTokenByStaffMember(
             Staff staffMember
     ) {
-        List<Token> validTokens = tokenRepository.findAllTokensByUser(staffMember.getId());
+        List<Token> validTokens = tokenRepository.findAllTokensByStaffMember_Id(staffMember.getId());
         if(validTokens.isEmpty()) {
             return;
         }
