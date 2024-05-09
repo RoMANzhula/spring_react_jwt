@@ -64,7 +64,7 @@ const Login = () => {
 
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username"  style={{ color: 'blue' }} >Username</label>
             <input
               type="text"
               className="form-control"
@@ -78,7 +78,7 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" style={{ color: 'blue' }} >Password</label>
             <input
               type="password"
               className="form-control"
@@ -91,7 +91,7 @@ const Login = () => {
             )}
           </div>
 
-          <div className="form-group">
+          <div className="form-group mt-3 text-center">
             <button className="btn btn-primary btn-block" disabled={loading}>
               {loading && (
                 <span className="spinner-border spinner-border-sm"></span>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UserTools from "../../services/user-tools.service";
 
-const CreateUserPage = () => {
+const CreateUserForm = () => {
   const [userData, setUserData] = useState({
     email: "",
     firstName: "",
@@ -147,4 +147,4 @@ const CreateUserPage = () => {
   );
 };
 
-export default CreateUserPage;
+export default CreateUserForm;
