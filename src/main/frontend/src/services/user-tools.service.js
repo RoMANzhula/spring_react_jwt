@@ -23,12 +23,22 @@ const getUsersByBirthdayRange = (from, to) => {
   return axios.get(`${API_URL}/birthday-range`, { params: { from, to }, headers: authHeader() });
 };
 
+const getAllUsers = () => {
+  return axios.get(`${API_URL}`, { headers: authHeader() });
+};
+
+const getUser = (userId) => {
+  return axios.get(`${API_URL}/${userId}`, { headers: authHeader() });
+};
+
 const UserTools = {
   createUser,
   updateUserField,
   updateWholeUser,
   removeUserById,
   getUsersByBirthdayRange,
+  getAllUsers,
+  getUser,
 };
 
 export default UserTools;
