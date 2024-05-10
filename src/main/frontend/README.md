@@ -15,3 +15,6 @@
 
 6. Add Formik and Yup for validation
       npm install formik yup
+
+7. Add Date-fns for work with dates
+      npm install date-fns
