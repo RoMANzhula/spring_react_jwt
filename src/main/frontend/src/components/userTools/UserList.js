@@ -10,7 +10,9 @@ const UserList = () => {
     const fetchUsers = async () => {
       try {
         const response = await UserTools.getAllUsers();
-        setUsers(response.data);
+        // sort firstname alphabetically
+        const sortedUsers = response.data.sort((a, b) => a.firstName.localeCompare(b.firstName));
+        setUsers(sortedUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
