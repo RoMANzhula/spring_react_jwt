@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { format } from 'date-fns';
 import UserTools from "../../services/user-tools.service";
+import { useNavigate } from "react-router-dom";
+
 
 const UpdateUserForm = ({ userId }) => {
+  const navigate = useNavigate();
+
   const todayDate = new Date();
   const formattedDate = format(todayDate, 'yyyy-MM-dd');
 
@@ -100,6 +104,8 @@ const UpdateUserForm = ({ userId }) => {
             address: "",
             phoneNumber: "",
         });
+        navigate("/all-users");
+        window.location.reload();
     } catch (error) {
         if (error.response && error.response.data) {
             const errorMessage = error.response.data;
@@ -110,6 +116,17 @@ const UpdateUserForm = ({ userId }) => {
     } finally {
         setLoading(false);
     }
+};
+
+const handleDeleteUser = async () => {
+  try {
+    await UserTools.removeUserById(userId);
+    alert("User successfully deleted!");
+    navigate("/all-users");
+    window.location.reload();
+  } catch (error) {
+    console.error("Error deleting user:", error);
+  }
 };
 
   return (
@@ -176,6 +193,7 @@ const UpdateUserForm = ({ userId }) => {
           {loading && <span className="spinner-border spinner-border-sm"></span>}
           <span>Update</span>
         </button>
+        <button type="button" className="ml-3" onClick={handleDeleteUser}>Delete User</button>
       </form>
       {message && <div className="error">{message}</div>}
     </div>
