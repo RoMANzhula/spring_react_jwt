@@ -26,7 +26,6 @@ import java.util.Map;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Validated
-//@CrossOrigin
 public class UserController {
 
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -60,32 +59,6 @@ public class UserController {
                 .body(new CreateUserResponse("User created successfully"))
         ;
     }
-
-    /**
-     * Example with validation marker
-     * with exception handler to BadRequest
-     * without BindingResult
-     */
-//    @PostMapping("/registration")
-//    public ResponseEntity<?> createUser(
-//            @Valid UserDTO userDTO,
-//            BindingResult bindingResult
-//    ) {
-//        if (!bindingResult.hasErrors()) {
-//            logger.error("Validation error! Check your input data.");
-//
-//            Map<String, String> errors = UtilsController.getBindingErrors(bindingResult);
-//
-//            return ResponseEntity
-//                    .badRequest()
-//                    .body(errors)
-//            ;
-//        }
-//
-//        userService.registerNewUser(userDTO);
-//
-//        return ResponseEntity.ok("User created successfully");
-//    }
 
     /**
      * Example with BindingResult
