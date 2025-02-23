@@ -1,3 +1,5 @@
+## Fullstack app example.
+
 ## Use technology:
 * Java 19 (downgraded from Java 21 to add maven plugin to create jar file to run frontend and backend at the same time)
 * Spring Web
